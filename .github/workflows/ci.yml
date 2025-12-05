@@ -1,0 +1,49 @@
+name: CI & Validation
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build, Lint & Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x] # Use a current LTS version of Node.js
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: 3. Install Dependencies
+        run: npm ci
+
+      - name: 4. Run Linter & Formatter Check
+        # Assuming a lint script is configured in package.json (e.g., using ESLint or Biome)
+        run: npm run lint
+
+      - name: 5. Run Unit & Integration Tests with Coverage
+        # This runs tests and generates a coverage report for Codecov
+        run: npm test -- --coverage
+
+      - name: 6. Upload Coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }} # Secret stored in GitHub repository settings
+          fail_ci_if_error: true
+
+      - name: 7. Perform Expo Health Check
+        # Validates project configuration and dependencies
+        run: npx expo doctor
