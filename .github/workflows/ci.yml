@@ -1,49 +1,149 @@
-name: CI & Validation
+name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main, develop]
   pull_request:
-    branches: [ "main" ]
-
-permissions:
-  contents: read
+    branches: [main, develop]
 
 jobs:
-  build-and-test:
-    name: Build, Lint & Test
+  lint:
+    name: Lint & Format Check
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x] # Use a current LTS version of Node.js
-
     steps:
-      - name: 1. Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 2. Setup Node.js Environment
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          node-version: '20'
+          cache: 'yarn'
 
-      - name: 3. Install Dependencies
-        run: npm ci
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
-      - name: 4. Run Linter & Formatter Check
-        # Assuming a lint script is configured in package.json (e.g., using ESLint or Biome)
-        run: npm run lint
+      - name: Run ESLint
+        run: yarn lint
 
-      - name: 5. Run Unit & Integration Tests with Coverage
-        # This runs tests and generates a coverage report for Codecov
-        run: npm test -- --coverage
+      - name: Check Prettier formatting
+        run: yarn format:check
 
-      - name: 6. Upload Coverage to Codecov
-        uses: codecov/codecov-action@v4
+  type-check:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          token: ${{ secrets.CODECOV_TOKEN }} # Secret stored in GitHub repository settings
-          fail_ci_if_error: true
+          node-version: '20'
+          cache: 'yarn'
 
-      - name: 7. Perform Expo Health Check
-        # Validates project configuration and dependencies
-        run: npx expo doctor
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run TypeScript compiler
+        run: yarn type-check
+
+  test:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run Jest
+        run: yarn test:ci
+
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    needs: [lint, type-check, test]
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build Android APK
+        run: yarn build:android
+        env:
+          JAVA_HOME: ${{ steps.setup-java.outputs.path }}
+
+  build-ios:
+    name: Build iOS
+    runs-on: macos-13
+    needs: [lint, type-check, test]
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install CocoaPods
+        uses: maxim-lobanov/setup-cocoapods@v1
+        with:
+          version: latest
+
+      - name: Cache Pods
+        uses: actions/cache@v4
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Pod Install
+        run: cd ios && pod install
+
+      - name: Build iOS App
+        run: |
+          sudo xcode-select -switch /Applications/Xcode_15.2.app/Contents/Developer
+          yarn build:ios
