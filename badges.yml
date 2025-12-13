@@ -1,45 +1,8 @@
-# .github/badges.yml
-# Configuration for README badges, using the 'flat-square' style as per Apex standards.
-
-badges:
-  - name: "Build Status"
-    markdown: "[
-![Build Status](https://img.shields.io/github/actions/workflow/status/chirag127/MindBloom-Digital-Wellbeing-Mindfulness-Mobile-App/ci.yml?branch=main&style=flat-square&logo=github&logoColor=white)
-](https://github.com/chirag127/MindBloom-Digital-Wellbeing-Mindfulness-Mobile-App/actions/workflows/ci.yml)"
-    image_url: "https://img.shields.io/github/actions/workflow/status/chirag127/MindBloom-Digital-Wellbeing-Mindfulness-Mobile-App/ci.yml?branch=main&style=flat-square&logo=github&logoColor=white"
-
-  - name: "Code Coverage"
-    markdown: "[
-![Code Coverage](https://img.shields.io/codecov/c/github/chirag127/MindBloom-Digital-Wellbeing-Mindfulness-Mobile-App?style=flat-square&logo=codecov&logoColor=white&token=YOUR_CODECOV_TOKEN)
-](https://codecov.io/gh/chirag127/MindBloom-Digital-Wellbeing-Mindfulness-Mobile-App)"
-    image_url: "https://img.shields.io/codecov/c/github/chirag127/MindBloom-Digital-Wellbeing-Mindfulness-Mobile-App?style=flat-square&logo=codecov&logoColor=white&token=YOUR_CODECOV_TOKEN"
-
-  - name: "Tech Stack: React Native"
-    markdown: "[
-![Tech Stack: React Native](https://img.shields.io/badge/React_Native-20232A?style=flat-square&logo=react&logoColor=61DAFB)
-](https://reactnative.dev/)"
-    image_url: "https://img.shields.io/badge/React_Native-20232A?style=flat-square&logo=react&logoColor=61DAFB"
-
-  - name: "Built with Expo"
-    markdown: "[
-![Built with Expo](https://img.shields.io/badge/Expo-000020?style=flat-square&logo=expo&logoColor=white)
-](https://expo.dev/)"
-    image_url: "https://img.shields.io/badge/Expo-000020?style=flat-square&logo=expo&logoColor=white"
-
-  - name: "Linted with Biome"
-    markdown: "[
-![Linted with Biome](https://img.shields.io/badge/Linted_with-Biome-60A5FA?style=flat-square&logo=biome&logoColor=white)
-](https://biomejs.dev/)"
-    image_url: "https://img.shields.io/badge/Linted_with-Biome-60A5FA?style=flat-square&logo=biome&logoColor=white"
-
-  - name: "License: CC BY-NC 4.0"
-    markdown: "[
-![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg?style=flat-square)
-](https://github.com/chirag127/MindBloom-Digital-Wellbeing-Mindfulness-Mobile-App/blob/main/LICENSE)"
-    image_url: "https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg?style=flat-square"
-
-  - name: "GitHub Stars"
-    markdown: "[
-![GitHub Stars](https://img.shields.io/github/stars/chirag127/MindBloom-Digital-Wellbeing-Mindfulness-Mobile-App?style=flat-square&logo=github&logoColor=white)
-](https://github.com/chirag127/MindBloom-Digital-Wellbeing-Mindfulness-Mobile-App/stargazers)"
-    image_url: "https://img.shields.io/github/stars/chirag127/MindBloom-Digital-Wellbeing-Mindfulness-Mobile-App?style=flat-square&logo=github&logoColor=white"
+build: "[![Build Status](https://img.shields.io/github/actions/workflow/status/chirag127/ScreenBloom-Social-Media-Detox-Mobile-App/ci.yml?branch=main&style=flat-square)](https://github.com/chirag127/ScreenBloom-Social-Media-Detox-Mobile-App/actions)"
+coverage: "[![Code Coverage](https://img.shields.io/codecov/c/github/chirag127/ScreenBloom-Social-Media-Detox-Mobile-App?style=flat-square)](https://app.codecov.io/gh/chirag127/ScreenBloom-Social-Media-Detox-Mobile-App)"
+language: "[![Language](https://img.shields.io/badge/Language-JavaScript%2FTypeScript-yellow?style=flat-square)](https://github.com/chirag127/ScreenBloom-Social-Media-Detox-Mobile-App)"
+framework: "[![Framework](https://img.shields.io/badge/Framework-React%20Native-61DAFB?style=flat-square)](https://reactnative.dev/)"
+platform: "[![Platform](https://img.shields.io/badge/Platform-Expo-4630EB?style=flat-square)](https://expo.dev/)"
+lint: "[![Lint](https://img.shields.io/badge/Lint-Biome-60C4B8?style=flat-square)](https://biomejs.dev/)"
+license: "[![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey?style=flat-square)](https://creativecommons.org/licenses/by-nc/4.0/)"
+stars: "[![GitHub Stars](https://img.shields.io/github/stars/chirag127/ScreenBloom-Social-Media-Detox-Mobile-App?style=flat-square)](https://github.com/chirag127/ScreenBloom-Social-Media-Detox-Mobile-App/stargazers)"
